@@ -37,7 +37,7 @@
 //     }
 // };
 
-class Solution{
+class Solution{ // Space Optimized TC O(m*n) SC O(1)
 public:
     int uniquePathsWithObstacles(vector<vector<int>>& A) {
         int r = A.size();
