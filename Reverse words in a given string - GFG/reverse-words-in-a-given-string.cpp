@@ -24,7 +24,7 @@ class Solution
                 temp+=a;
         }
         
-        for(int i=rev.size()-1;i>-1;--i){
+        for(int i=rev.size()-1;i>=0;--i){
             temp+=rev[i];
         }
         return temp;
