@@ -1,27 +1,39 @@
 class Solution {
 public:
-    bool helper(int ind, int target, vector<int> &arr ,vector<vector<int>> &dp){
-    if(target ==0) return true;
-    if(ind ==0) return (arr[0]==target);
-    
-    if(dp[ind][target]!=-1) return dp[ind][target];
-    
-    bool notTake = helper(ind-1,target,arr,dp);
-    bool take = false;
-    if(arr[ind]<=target){
-        take = helper(ind-1,target-arr[ind],arr,dp);
-    }
-    return dp[ind][target]= take || notTake;
-}
-    bool canPartition(vector<int>& arr) {
-        int n = arr.size();
-        int sum=0;
-        for(int i=0;i<n;i++){
-            sum+=arr[i];
+    bool isSubsetSum(int n, vector<int> & arr, int sum){
+        // code here 
+        bool dp[n+1][sum+1];
+        for(int i=0;i<n+1;i++){
+            for(int j=0;j<sum+1;j++){
+                if(i==0)
+                    dp[i][j]=false;
+                if(j==0) 
+                    dp[i][j]=true;
+            }
         }
-        if(sum%2!=0) return false;
-        int target = sum/2;
-        vector<vector<int>> dp(n,vector<int>(target+1,-1));
-        return helper(n-1,target,arr,dp);
+        
+        for(int i=1;i<n+1;i++)
+        {
+            for(int j=1;j<sum+1;j++){
+                if(arr[i-1]<=j){
+                    dp[i][j] = dp[i-1][j-arr[i-1]] || dp[i-1][j];
+                }
+                else if(arr[i-1]>j)
+                {
+                    dp[i][j]=dp[i-1][j];
+                }
+            }
+        }
+        return dp[n][sum];
+    }
+    bool canPartition(vector<int>& nums) {
+        int n = nums.size();
+        int sumatation=0;
+        for(int i=0;i<n;i++){
+            sumatation+=nums[i];
+        }
+        if(sumatation%2!=0) return false;
+        int sum = sumatation/2;
+        return isSubsetSum(n,nums,sum);
     }
 };
