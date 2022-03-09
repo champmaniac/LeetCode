@@ -1,15 +1,11 @@
 class Solution {
 public:
-    int solve(int i,vector<int> &nums, int sum,vector<unordered_map<int,int>> &mp){
-        if(i==nums.size()){
-            return sum ==0;
-        }
-        auto it = mp[i].find(sum);
-        if(it!=mp[i].end()) return it->second;
-        return mp[i][sum] = solve(i+1,nums,sum+nums[i],mp)+solve(i+1,nums,sum-nums[i],mp);
+    int helper(int p, vector<int> &nums,int target){
+        int n = nums.size();
+        if(p==n) return target==0;
+        return helper(p+1,nums,target+nums[p])+helper(p+1,nums,target-nums[p]);
     }
     int findTargetSumWays(vector<int>& nums, int target) {
-        vector<unordered_map<int,int>> mp(nums.size());
-        return solve(0,nums,target,mp);
+        return helper(0,nums,target);
     }
 };
