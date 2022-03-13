@@ -28,12 +28,28 @@ public:
         if(isPalindrome(str,i,j)){
             return dp[i][j]= 0;
         }
+        int ans = INT_MAX;
+        int left,right;
         if(dp[i][j]!=-1) return dp[i][j];
-        dp[i][j]  = INT_MAX;
-        for(int k=i;k<=j-1;k++){
-            dp[i][j] = min(dp[i][j], solve(str, i, k) + solve(str, k + 1, j) + 1 );
+        else{
+            for(int k=i;k<=j-1;k++){
+                if(dp[i][k]!=-1)
+                    left = dp[i][k];
+                else{
+                    left =solve(str,i,k);
+                    dp[i][k]=left;
+                }
+                if(dp[k+1][j]!=-1)
+                    right=dp[k+1][j];
+                else{
+                    right = solve(str,k+1,j);
+                    dp[k+1][j]=right;
+                }
+                int tans = 1+left+right;
+                ans = min(ans,tans);
+            }
         }
-        return dp[i][j];
+        return ans;
     }
     
     int palindromicPartition(string str)
