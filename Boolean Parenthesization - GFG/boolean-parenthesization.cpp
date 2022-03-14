@@ -18,7 +18,7 @@ public:
             else return s[i] == 'F';
         }
         
-        if(dp[isTrue][i][j]>-1) return dp[isTrue][i][j];
+        if(dp[isTrue][i][j]!=-1) return dp[isTrue][i][j];
         
         int ans=0;
         for(int k=i+1;k<=j-1;k+=2){
