@@ -21,7 +21,7 @@ public:
         if(dp[isTrue][i][j]>-1) return dp[isTrue][i][j];
         
         int ans=0;
-        for(int k=i+1;k<j;k+=2){
+        for(int k=i+1;k<=j-1;k+=2){
             int LT= solve(s,i,k-1,true);
             int LF= solve(s,i,k-1,false);
             int RT= solve(s,k+1,j,true); 
