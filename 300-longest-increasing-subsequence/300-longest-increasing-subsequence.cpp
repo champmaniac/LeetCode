@@ -4,6 +4,8 @@ public:
         int n = nums.size();
         vector<int> dp(n+1,1);
         
+        if(dp[n]!=1) return dp[n];
+        
         for(int i=0;i<n;i++){
             for(int j=0;j<i;j++){
                 if(nums[i]>nums[j]){
@@ -16,6 +18,6 @@ public:
         for(int i=0;i<n;i++){
             maxi = max(maxi,dp[i]);
         }
-        return maxi;
+        return dp[n]= maxi;
     }
 };
