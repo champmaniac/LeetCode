@@ -1,6 +1,8 @@
 class Solution {
 public:
+    int dp[1001][1001];
     int countSubstrings(string s) {
+        memset(dp,-1,sizeof dp);
         return recursive(s);
     }
     int recursive(string &s){
@@ -15,6 +17,7 @@ public:
     
     int isPalindrome(string &s, int i, int j){
         if(i>=j) return 1;
-        return s[i]==s[j]?isPalindrome(s,i+1,j-1):0;
+        if(dp[i][j]!=-1) return dp[i][j];
+        return dp[i][j]=s[i]==s[j]?isPalindrome(s,i+1,j-1):0;
     }
 };
