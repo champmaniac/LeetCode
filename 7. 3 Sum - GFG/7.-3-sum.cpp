@@ -9,33 +9,29 @@ using namespace std;
 
 class Solution {
   public:
-    vector<vector<int> > findTriplets(vector<int> &nums, int N) {
+    vector<vector<int> > findTriplets(vector<int> &nums, int n) {
         // code here
-        int n = N;
         sort(nums.begin(),nums.end());
         vector<vector<int>> res;
         for(int i=0;i<n;i++){
-            int a = nums[i];
-            int t = -a;
-            int s=i+1; // start
-            int e=n-1; // end
-            while(s<e){
-                if(nums[s]+nums[e]==t){
-                    res.push_back({nums[i],nums[s],nums[e]});
-                    while(s<e && nums[s]==nums[s+1]) s++;
-                    while(s<e && nums[e]==nums[e-1]) e--;   
-                    s++;
-                    e--;
+            int x = nums[i];
+            int y = -x;
+            int start =i+1;
+            int end = n-1;
+            while(start<end){
+                if(nums[start]+nums[end]==y){
+                    res.push_back({nums[i],nums[start],nums[end]});
+                    while(start<end && nums[start]==nums[start+1])start++;
+                    while(start<end && nums[end]==nums[end-1]) end--;
+                    start++;
+                    end--;
                 }
-                else if(nums[s]+nums[e]>t)
-                    e--;
-                else
-                    s++;
+                else if(nums[start]+nums[end]>y) end--;
+                else start++;
             }
-            while(i+1<n && nums[i+1]==nums[i]) i++;
+            while(i+1<n && nums[i]==nums[i+1]) i++;
         }
         return res;
-        
     }
 };
 
