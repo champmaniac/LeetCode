@@ -7,7 +7,7 @@ using namespace std;
  // } Driver Code Ends
 //User function template for C++
 
-class Solution{
+class Solution{ // TC O(N) SC O(1)
   public:
 	int MinParentheses(string S)
 	{
