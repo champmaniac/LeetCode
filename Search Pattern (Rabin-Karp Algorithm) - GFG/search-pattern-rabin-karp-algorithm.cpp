@@ -10,19 +10,13 @@ class Solution
         vector <int> search(string pat, string txt)
         {
             //code here.
-            int m = pat.size(), n = txt.size();
             vector<int> ans;
-            for(int i=0;i<=n-m;i++){
-                int j;
-                for(j=0;j<m;j++){
-                    if(txt[j+i]!=pat[j]) break;
-                }
-                if(j==m) ans.push_back(i+1);
+            int n = txt.size(), m = pat.size();
+            for(int i=0;i<n;i++){
+                if(txt.substr(i,m)==pat) ans.push_back(i+1);
             }
-            if(ans.size()==0) {
-                ans.push_back(-1);
-                return ans;
-            }
+            if(!ans.empty()) return ans;
+            else ans.push_back(-1);
             return ans;
         }
      
