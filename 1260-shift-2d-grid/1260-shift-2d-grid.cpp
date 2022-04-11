@@ -1,16 +1,17 @@
 class Solution {
 public:
     vector<vector<int>> shiftGrid(vector<vector<int>>& grid, int k) {
-        int m = grid.size(), n = grid[0].size();
-        vector<vector<int>> ans(m,vector<int>(n,0));
-        for(int i=0;i<m*n;i++){
-            int ori_y = i/n;
-            int ori_x = i%n;
-            int new_y = (ori_y+(ori_x+k)/n)%m;
-            int new_x = (ori_x+k)%n;
-            
-            ans[new_y][new_x] = grid[ori_y][ori_x];
+        vector<vector<int>> result(grid);
+        int n = grid.size();
+        int m = grid[0].size();
+        int x,y;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                x = (m*i+j+k)/m%n;
+                y = (m*i+j+k)%m;
+                result[x][y] = grid[i][j];
+            }
         }
-        return ans;
+        return result;
     }
 };
