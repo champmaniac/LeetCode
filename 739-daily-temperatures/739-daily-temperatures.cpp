@@ -2,18 +2,18 @@ class Solution {
 public:
     vector<int> dailyTemperatures(vector<int>& temp) {
         int n = temp.size();
-        int maxi = temp[n-1];
+        int maxi = INT_MIN;
         vector<int> res(n,0);
-        for(int i=n-2;i>=0;i--){
+        for(int i=n-1;i>=0;i--){
             if(temp[i]>=maxi){
                 maxi = temp[i];
                 continue;
             }
-            int j = i+1;
-            while(temp[i]>=temp[j]){
-                j = res[j]==0?0:j+res[j];
+            int d=1;
+            while(temp[i]>=temp[i+d]){
+                d+=res[i+d];
             }
-            res[i]=j-i;
+            res[i]=d;
         }
         return res;
     }
