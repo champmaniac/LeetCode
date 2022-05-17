@@ -20,7 +20,7 @@ public:
                 if(curDis>dist[curNode]) continue;
                 dist[curNode]= curDis;
                 for(auto adjEdge:adj[curNode]){
-                    if(curDis+adjEdge.second>ans) continue;
+                    // if(curDis+adjEdge.second>ans) continue;
                     if(adjEdge.first==dst)ans = min(ans,curDis+adjEdge.second);
                     q.push({adjEdge.first,adjEdge.second+curDis});
                 }
