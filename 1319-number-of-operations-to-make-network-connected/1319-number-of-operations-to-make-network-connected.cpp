@@ -1,30 +1,23 @@
 class Solution {
 public:
-    void dfs(int src,vector<int> adj[], vector<int> &vis){
-        vis[src]=1;
-        for(auto m:adj[src]){
-            if(!vis[m]){
-                dfs(m,adj,vis);
-            }
-        }
+    int findPar(int u,vector<int>&parent){
+        if(parent[u]==u) return parent[u];
+        return parent[u] = findPar(parent[u],parent);
     }
-    int makeConnected(int n, vector<vector<int>>& edges) {
-        vector<int> adj[n];
-        int m = edges.size(); // connections = edges
-        if(m<n-1) return -1;
-        for(int i=0;i<m;i++){
-            adj[edges[i][0]].push_back(edges[i][1]);
-            adj[edges[i][1]].push_back(edges[i][0]);
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        vector<int> parent(n);
+        for(int i=0;i<n;i++){
+            parent[i]=i;
         }
         
-        vector<int> vis(n,0);
-        int c=0;
-        for(int i=0;i<n;i++){
-            if(!vis[i]){
-                c++;
-                dfs(i,adj,vis);
-            }
+        int compo=0;
+        for(auto &it: connections){
+            int u = findPar(it[0],parent);
+            int v = findPar(it[1],parent);
+            
+            if(u==v) continue;
+            else parent[v] =u, compo++; 
         }
-        return c-1;
+        return connections.size() < n-1 ? -1 : n-1-compo;
     }
 };
