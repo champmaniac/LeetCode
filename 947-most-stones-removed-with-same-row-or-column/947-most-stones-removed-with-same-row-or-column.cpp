@@ -1,23 +1,34 @@
 class Solution {
 public:
-    unordered_map<int,int> mp;
-    int islands=0;
-    int find(int x){
-        if(!mp.count(x)) mp[x]=x,islands++;
-        if(x!=mp[x]) mp[x] = find(mp[x]);
-        return mp[x];
+    vector<int> parent;
+    int findPar(int node){
+        if(node==parent[node]) return node;
+        return parent[node] = findPar(parent[node]);
     }
-    void uni(int x, int y){
-        x=find(x), y=find(y);
-        if(y!=x){
-            mp[x] = y;
-            --islands;
-        }
+    
+    bool unionn(int u,int v){
+        u = findPar(u);
+        v = findPar(v);
+        
+        if(u==v) return false;
+        parent[v]=u;
+        return true;
     }
     int removeStones(vector<vector<int>>& stones) {
-        for(int i=0;i<stones.size();i++){
-            uni(stones[i][0], ~stones[i][1]);
+        int n = stones.size();
+        parent.resize(n);
+        
+        for(int i=0;i<n;i++){
+            parent[i]=i;
         }
-        return stones.size()-islands;
+        int cnt=0;
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<n;j++){
+                if(stones[i][0]==stones[j][0] || (stones[i][1]==stones[j][1]))
+                    if(unionn(i,j))
+                        cnt++;
+            }
+        }
+        return cnt;
     }
 };
