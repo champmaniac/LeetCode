@@ -2,38 +2,34 @@ class Solution {
 public:
     vector<vector<int>> adj;
     vector<vector<int>> ans;
-    vector<int> Id;
-    vector<int> lowLink;
-    vector<bool> vis;
-    int time =0;
+    vector<int> firstTime, minTime, visited;
     
-    void dfs(int node, int parent){
-        Id[node]=lowLink[node]= time++;
-        vis[node]= true;
-        for(int &x:adj[node]){
-            if(parent==x) continue;
-            if(!vis[x]){
-                dfs(x,node);
-                lowLink[node]= min(lowLink[node],lowLink[x]);
-                if(Id[node]<lowLink[x])
-                    ans.push_back({node,x});
+    int time = 1;
+    void dfs(int node, int parent = -1){
+        firstTime[node] = minTime[node] = time++;
+        visited[node]=true;
+        
+        for(auto &child:adj[node]){
+            if(parent==child) continue;
+            if(!visited[child]){
+                dfs(child,node);
             }
-            else
-                lowLink[node] = min(lowLink[node],Id[x]);
+            minTime[node] = min(minTime[child],minTime[node]);
+            if(firstTime[node]<minTime[child])
+                ans.push_back({node,child});
         }
     }
     vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
-        adj.resize(n);
-        vis.resize(n,false);
-        lowLink.resize(n,0);
-        Id.resize(n,0);
-        for(auto &x:connections){
-            adj[x[0]].push_back(x[1]);
-            adj[x[1]].push_back(x[0]);
+        firstTime.resize(n), minTime.resize(n), visited.resize(n), adj.resize(n);
+        for(auto &e: connections){
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
         }
-        for(int i=0;i<n;i++)
-            if(!vis[i])
-                dfs(i,i);
+        
+        for(int i=0;i<n;i++){
+            if(!visited[i])
+                dfs(i);
+        }
         return ans;
     }
 };
