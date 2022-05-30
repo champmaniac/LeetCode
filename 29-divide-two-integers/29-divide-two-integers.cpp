@@ -1,19 +1,20 @@
 class Solution {
 public:
     int divide(int dividend, int divisor) {
-        long long result=0;
-        long long m=abs((long long)dividend);
-        long long n=abs((long long)divisor);
-        while(m>=n){
-            long long s=n, power=1;
-            while((s<<1) <= m){ 
-                s<<=1; power<<=1; 
-            }
-            result+=power;
-            m-=s;
-        }
-        
-        if( (dividend>0) ^ (divisor>0))  result = -result;
-        return result>INT_MAX ? INT_MAX:result;
+        if (dividend == INT_MIN && divisor == -1 ) return INT_MAX;
+        if (dividend == INT_MIN && divisor == 1 ) return INT_MIN;
+    
+    int ans = 0, sign = dividend > 0 == divisor > 0 ? 1 : -1;
+    if (divisor == -INT_MAX) return dividend == divisor;
+    if (dividend == -INT_MAX)
+        if (divisor == 1) return -INT_MAX;
+        else if (divisor == -1) return INT_MAX;
+        else dividend += abs(divisor), ans++;
+    long numerator = abs(dividend), denominator = abs(divisor);
+    for (int i = 0; numerator >= denominator; i = 0) {
+        while (numerator >> i >= denominator) i++;
+        numerator -= denominator << i - 1, ans += 1 << i - 1;
+    }
+    return sign < 0 ? -ans : ans; 
     }
 };
