@@ -5,17 +5,17 @@ using namespace std;
  // } Driver Code Ends
 class Solution {
 public:
-    bool bfs(int ind, vector<int> &color, vector<int> adj[]){
+    bool bfs(int node, vector<int> adj[], vector<int> &color){
         queue<pair<int,int>> q;
-        q.push({ind,1});
-        color[ind]=1;
+        q.push({node,1});
+        color[node]=1;
         while(!q.empty()){
             int curNode = q.front().first;
             int curCol = q.front().second;
             q.pop();
-            for(auto nbr:adj[curNode]){
+            for(auto &nbr: adj[curNode]){
                 if(color[nbr]==-1){
-                    color[nbr]=1-curCol;
+                    color[nbr]=1-color[curNode];
                     q.push({nbr,color[nbr]});
                 }
                 else if(color[nbr]==color[curNode]) return false;
@@ -26,10 +26,9 @@ public:
 	bool isBipartite(int V, vector<int>adj[]){
 	    // Code here
 	    vector<int> color(V,-1);
-	    vector<bool> vis(V,false);
 	    for(int i=0;i<V;i++){
 	        if(color[i]==-1){
-	            if(!bfs(i,color,adj)) return false;
+	            if(!bfs(i,adj,color)) return false;
 	        }
 	    }
 	    return true;
