@@ -5,10 +5,12 @@ public:
     }
     int scheduleCourse(vector<vector<int>>& courses) {
         int n = courses.size();
+        // sort it by last day, but if last day is same then sort it by duration
         sort(courses.begin(),courses.end(),comp);
         priority_queue<int> pq;
         int maxT=0;
         for(auto course:courses){
+            // checking if we can can take the current course if course duration is less than course last day
             if(course[0]<=course[1]){
                 if(maxT+course[0]<=course[1]){
                     pq.push(course[0]);
