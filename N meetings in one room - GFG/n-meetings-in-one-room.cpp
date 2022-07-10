@@ -4,29 +4,30 @@ using namespace std;
 
  // } Driver Code Ends
 class Solution
-
 {
     public:
     //Function to find the maximum number of meetings that can
     //be performed in a meeting room.
+    static bool comp(vector<int> &a, vector<int> &b){
+        return a[1]<b[1];
+    }
     int maxMeetings(int start[], int end[], int n)
     {
         // Your code here
-        if(n==0) return 0;
         vector<vector<int>> res;
-        for(int i{};i<n;i++){
-            vector<int>v;
-            v.push_back(end[i]);
-            v.push_back(start[i]);
-            res.push_back(v);
+        for(int i=0;i<n;i++){
+            res.push_back({start[i],end[i]});
         }
-        sort(res.begin(),res.end());
-        int limit = res[0][0];
-        int cnt{1};
-        for(int i{1};i<res.size();i++){
-            if(res[i][1]>limit) limit = res[i][0],cnt++;
+        sort(res.begin(),res.end(),comp);
+        int ans=0;
+        int cur=0;
+        for(int i=0;i<n;i++){
+            if(res[i][0]>cur) {
+                ans++;
+                cur = res[i][1];
+            }
         }
-        return cnt;
+        return ans;
     }
 };
 
