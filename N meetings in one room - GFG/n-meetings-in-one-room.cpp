@@ -19,9 +19,9 @@ class Solution
             res.push_back({start[i],end[i]});
         }
         sort(res.begin(),res.end(),comp);
-        int ans=0;
-        int cur=0;
-        for(int i=0;i<n;i++){
+        int ans=1;
+        int cur=res[0][1];
+        for(int i=1;i<n;i++){
             if(res[i][0]>cur) {
                 ans++;
                 cur = res[i][1];
