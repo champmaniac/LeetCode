@@ -1,58 +1,56 @@
-struct Node{
-    Node* links[26];
-    bool flag= false;
-    bool containsKey(char ch) {
-		return (links[ch-'a']!= NULL);
-	}
-    void put(char ch, Node* node){
-        links[ch-'a']=node;
-    }
-    Node* get(char ch){
-        return links[ch-'a'];
-    }
-    void setEnd(){
-        flag = true;
-    }
-    bool isEnd(){
-        return flag;
+class TrieNode{
+public:
+    bool isEnd;
+    TrieNode *child[26];
+    TrieNode(){
+        isEnd = false;
+        for(int i=0;i<26;i++){
+            child[i] = NULL;
+        }
     }
 };
 class Trie {
-private: Node* root;
 public:
+    TrieNode* root;
     Trie() {
-        root = new Node();
+        root = new TrieNode();
     }
     
     void insert(string word) {
-        Node* node = root;
-        for(int i=0;i<word.size();i++){
-            if(!node->containsKey(word[i])){
-                node->put(word[i],new Node());
+        TrieNode* parent = root;
+        int n = word.size(); 
+        for(int i=0;i<n;i++){
+            int val = word[i]-'a';
+            if(parent->child[val]==NULL){
+                parent->child[val] = new TrieNode();
             }
-            node=node->get(word[i]);
+            parent = parent->child[val];
         }
-        node->setEnd();
+        parent->isEnd = true;
     }
     
     bool search(string word) {
-        Node* node = root;
-        for(int i=0;i<word.size();i++){
-            if(!node->containsKey(word[i])){
+        TrieNode* parent = root;
+        int n = word.size();
+        for(int i=0;i<n;i++){
+            int val = word[i]-'a';
+            if(parent->child[val]==NULL){
                 return false;
             }
-            node = node->get(word[i]);
+            parent = parent->child[val];
         }
-        return node->isEnd();
+        return parent->isEnd;
     }
     
     bool startsWith(string prefix) {
-        Node* node = root;
-        for(int i=0;i<prefix.size();i++){
-            if(!node->containsKey(prefix[i])){
+        TrieNode* parent = root;
+        int n = prefix.size();
+        for(int i=0;i<n;i++){
+            int val = prefix[i]-'a';
+            if(parent->child[val]==NULL){
                 return false;
             }
-            node = node->get(prefix[i]);
+            parent = parent->child[val];
         }
         return true;
     }
