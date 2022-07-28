@@ -8,15 +8,14 @@ public:
         while(!q.empty()){
             auto top = q.front();
             q.pop();
-            
-            vis[top]=true;
-            for(int &room:rooms[top]){
-                if(!vis[room]){
-                    q.push(room);
+            vis[top] = true;
+            for(auto &node:rooms[top]){
+                if(!vis[node]){
+                    q.push(node);
                 }
             }
         }
-        for(bool x:vis){
+        for(auto x:vis){
             if(x==false) return false;
         }
         return true;
