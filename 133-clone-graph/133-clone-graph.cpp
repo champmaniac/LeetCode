@@ -19,42 +19,17 @@ public:
 };
 */
 
-class Solution { // BFS APPROACH
+class Solution {
 public:
     unordered_map<Node*,Node*> mp;
     Node* cloneGraph(Node* node) {
-        if(node==NULL) return NULL;
-        queue<Node*> q;
-        Node* first = new Node(node->val,{}); 
-        mp[node]=first;
-        q.push(node);
-        while(!q.empty()){
-            auto cur = q.front();
-            q.pop();
-            
-            for(auto adj:cur->neighbors){
-                if(mp.find(adj)==mp.end()){ // node not present in map
-                    mp[adj] = new Node(adj->val,{});
-                    q.push(adj);
-                }
-                mp[cur]->neighbors.push_back(mp[adj]);
+        if(!node) return NULL;
+        if(mp.find(node)==mp.end()){
+            mp[node] = new Node(node->val,{});
+            for(auto adj:node->neighbors){
+                mp[node]->neighbors.push_back(cloneGraph(adj));
             }
         }
         return mp[node];
     }
 };
-
-// class Solution { // DFS APPROACH
-// public:
-//     unordered_map<Node*,Node*> mp;
-//     Node* cloneGraph(Node* node) {
-//         if(node==NULL) return NULL;
-//         if(mp.find(node)==mp.end()){ // node not present in map
-//             mp[node]= new Node(node->val,{}); // making a copy
-//             for(auto adj:node->neighbors){ // travel to it's adjacent
-//                 mp[node]->neighbors.push_back(cloneGraph(adj)); // add the copy
-//             }
-//         }
-//         return mp[node]; // return the deep copy(clone) of the graph
-//     }
-// };
