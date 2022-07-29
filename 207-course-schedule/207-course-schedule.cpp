@@ -1,31 +1,28 @@
 class Solution {
 public:
-    bool canFinish(int numCourses, vector<vector<int>>& pq) {
-        vector<vector<int>> graph(numCourses);
-        vector<int> degree(numCourses,0);
-        queue<int> zeroDegree;
-        for(int i=0;i<pq.size();i++){
-            graph[pq[i][1]].push_back(pq[i][0]);
-            degree[pq[i][0]]++;
+    bool canFinish(int n, vector<vector<int>>& pre) {
+        vector<vector<int>> adj(n);
+        vector<int> inDegree(n,0);
+        queue<int> q;
+        for(auto &p:pre){
+            adj[p[1]].push_back(p[0]);
+            ++inDegree[p[0]];
         }
-        for(int i=0;i<degree.size();i++){
-            if(degree[i]==0){
-                zeroDegree.push(i);
-                numCourses--;
+        for(int i=0;i<inDegree.size();i++){
+            if(inDegree[i]==0)
+                q.push(i);
+        }
+        int count=0;
+        while(!q.empty()){
+            auto node = q.front();
+            q.pop();
+            ++count;
+            for(auto &it:adj[node]){
+                --inDegree[it];
+                if(inDegree[it]==0)
+                    q.push(it);
             }
         }
-        while(!zeroDegree.empty()){
-            int node = zeroDegree.front();
-            zeroDegree.pop();
-            for(int i=0;i<graph[node].size();i++){
-                int connectedNode = graph[node][i];
-                degree[connectedNode]--;
-                if(degree[connectedNode]==0){
-                    zeroDegree.push(connectedNode);
-                    numCourses--;
-                }
-            }
-        }
-        return numCourses==0;
+        return count==n;
     }
 };
