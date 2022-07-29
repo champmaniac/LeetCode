@@ -1,19 +1,16 @@
 class Solution {
 public:
-    bool isvalid(int i,int j,int m,int n)
-    {
-        if(i==m||j==n||j<0||i<0)
-            return false;
+    bool isValid(int i,int j,int m,int n){
+        if(i<0 || j<0 || i>=m || j>=n) return false;
         return true;
     }
-    
-    vector<vector<int>> dir={{1,0},{0,1},{0,-1},{-1,0}};
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
         int m = mat.size();
         int n = mat[0].size();
+        vector<vector<int>> vis(m,vector<int> (n,-1));
         queue<pair<int,int>> q;
         
-        vector<vector<int>> vis(m,vector<int>(n,-1));
+        vector<vector<int>> dir={{0,1},{1,0},{0,-1},{-1,0}};
         for(int i=0;i<m;i++){
             for(int j=0;j<n;j++){
                 if(mat[i][j]==0){
@@ -22,18 +19,16 @@ public:
                 }
             }
         }
-        
         while(!q.empty()){
-            pair<int,int> curr = q.front();
+            pair<int,int> top = q.front();
             q.pop();
-            for(auto &x: dir){
-                int a = curr.first+x[0];
-                int b = curr.second+x[1];
+            for(auto &it:dir){
+                int x = top.first+it[0];
+                int y = top.second+it[1];
                 
-                if(isvalid(a,b,m,n) && vis[a][b]==-1)
-                {
-                    q.push({a,b});
-                    vis[a][b] = vis[curr.first][curr.second]+1;
+                if(isValid(x,y,m,n) && vis[x][y]==-1){
+                    q.push({x,y});
+                    vis[x][y]=vis[top.first][top.second]+1;
                 }
             }
         }
