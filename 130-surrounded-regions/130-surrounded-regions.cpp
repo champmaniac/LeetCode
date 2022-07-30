@@ -4,7 +4,8 @@ public:
         return (i>=0 && j>=0 && i<m && j<n);
     }
     bool isBorder(int i,int j,int m,int n){
-        return (i==0 || i==m-1 || j==0 || j==n-1);
+        if(i==0 || j==0 || i==m-1 || j==n-1) return true;
+        return false;
     }
     void solve(vector<vector<char>>& board) {
         int m = board.size();
@@ -21,14 +22,12 @@ public:
                 }
             }
         }
-        
         while(!q.empty()){
-            pair<int,int> temp = q.front();
+            pair<int,int> p = q.front();
             q.pop();
-            
             for(int i=0;i<dir.size();i++){
-                int x = temp.first+dir[i].first;
-                int y = temp.second+dir[i].second;
+                int x = p.first+dir[i].first;
+                int y = p.second+dir[i].second;
                 
                 if(isSafe(x,y,m,n) && !isBorder(x,y,m,n) && board[x][y]=='O'){
                     board[x][y]='#';
@@ -36,7 +35,6 @@ public:
                 }
             }
         }
-        
         for(int i=0;i<m;i++){
             for(int j=0;j<n;j++){
                 if(board[i][j]=='O')
