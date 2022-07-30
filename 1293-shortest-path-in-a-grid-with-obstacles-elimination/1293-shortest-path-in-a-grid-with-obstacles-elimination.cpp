@@ -1,45 +1,54 @@
+class Node{
+    public:
+    int curRow,curCol,remSuperPower;
+    Node(int r, int c, int s){
+        curRow = r;
+        curCol = c;
+        remSuperPower = s;
+    }
+};
 class Solution {
 public:
-    int dx[4]= {1,0,-1,0};
-    int dy[4]= {0,1,0,-1};
+    bool isvalid(int i,int j,int m,int n){
+        if(i<0 || j<0 || i>=m || j>=n) return false;
+        return true;
+    }
     int shortestPath(vector<vector<int>>& grid, int k) {
         int m = grid.size();
         int n = grid[0].size();
-        vector<vector<int>> vis(m, vector<int>(n, -1));
         
-        queue<vector<int>> q;
-        // x, y, currentLength, remaining k
-        q.push({0,0,0,k});
+        if(n==1 && m==1) return 0;
+        
+        vector<vector<int>> vis(m,vector<int>(n,-1));
+        vector<vector<int>> dir={{0,1},{1,0},{0,-1},{-1,0}};
+        queue<Node*> q;
+        q.push(new Node(0,0,k));
+        vis[0][0]= k;
+        int level=0;
         while(!q.empty()){
-            int sz = q.size();
-            while(sz-- >0){
-                int x = q.front()[0];
-                int y = q.front()[1];
-                int step = q.front()[2];
-                int newK = q.front()[3];
-                
+            int size = q.size();
+            while(size--){
+                Node* curNode = q.front();
                 q.pop();
-                // reached the destination
-                if(x==m-1 && y==n-1) return step;
-                // boundary check
-                if(x<0 || y<0 || x>=m || y>=n) continue;
-                // the newK is less than what the k value that the visited array has already seen
-                // i.e less superpower(newK) has come then just continue
-                if(vis[x][y]!=-1 && vis[x][y]>=newK) continue;
-                
-                if(grid[x][y]==1){
-                    if(newK>0)
-                        newK--;
-                    else
-                        continue;
-                }
-                vis[x][y] = newK;
-                for(int i=0;i<4;i++){
-                    int x1 = x+dx[i];
-                    int y1 = y+dy[i];
-                    q.push({x1,y1,step+1,newK});
+                for(int i=0;i<dir.size();i++){
+                    int nextRow = curNode->curRow+dir[i][0];
+                    int nextCol = curNode->curCol+dir[i][1];
+                    
+                    if(nextRow==m-1 && nextCol==n-1) return level+1;
+                    
+                    if(isvalid(nextRow,nextCol,m,n)){
+                        if(grid[nextRow][nextCol]==1 && curNode->remSuperPower>0 && vis[nextRow][nextCol]<(curNode->remSuperPower-1)){
+                            q.push(new Node(nextRow,nextCol,curNode->remSuperPower-1));
+                            vis[nextRow][nextCol] = curNode->remSuperPower-1;
+                        }
+                        else if(grid[nextRow][nextCol]==0 && vis[nextRow][nextCol]<(curNode->remSuperPower)){
+                            q.push(new Node(nextRow,nextCol,curNode->remSuperPower));
+                            vis[nextRow][nextCol] = curNode->remSuperPower;
+                        }
+                    }
                 }
             }
+            level++;
         }
         return -1;
     }
