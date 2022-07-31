@@ -1,23 +1,28 @@
 class Solution {
 public:
-    int findPar(int u,vector<int>&parent){
-        if(parent[u]==u) return parent[u];
-        return parent[u] = findPar(parent[u],parent);
+    void dfs(int node,vector<bool> &vis,vector<vector<int>> &adj){
+        vis[node]=1;
+        for(auto links:adj[node]){
+            if(!vis[links]){
+                dfs(links,vis,adj);
+            }
+        }
     }
     int makeConnected(int n, vector<vector<int>>& connections) {
-        vector<int> parent(n);
+        if(connections.size()<n-1) return -1;
+        vector<vector<int>> adj(n);
+        for(auto links:connections){
+            adj[links[0]].push_back(links[1]);
+            adj[links[1]].push_back(links[0]);
+        }
+        vector<bool> vis(n,0);
+        int miniOps=0;
         for(int i=0;i<n;i++){
-            parent[i]=i;
+            if(!vis[i]){
+                dfs(i,vis,adj);
+                miniOps++;
+            }
         }
-        
-        int compo=0;
-        for(auto &it: connections){
-            int u = findPar(it[0],parent);
-            int v = findPar(it[1],parent);
-            
-            if(u==v) continue;
-            else parent[v] =u, compo++; 
-        }
-        return connections.size() < n-1 ? -1 : n-1-compo;
+        return miniOps-1;
     }
 };
