@@ -1,28 +1,51 @@
-class Solution {
-public:
-    void dfs(int node,vector<bool> &vis,vector<vector<int>> &adj){
-        vis[node]=1;
-        for(auto links:adj[node]){
-            if(!vis[links]){
-                dfs(links,vis,adj);
-            }
+struct DSU{
+    vector<int> rank;
+    vector<int> parent;
+    public:
+    DSU(int n){
+        rank.resize(n,0), parent.resize(n,0);
+        iota(parent.begin(), parent.end(), 0);
+    }
+    int findParent(int a){
+        if(a==parent[a]) return a;
+        return parent[a] = findParent(parent[a]);
+    }
+    void Union(int u,int v){
+        int parU = findParent(u);
+        int parV = findParent(v);
+        
+        if(rank[parU]<rank[parV]){
+            parent[parU]=parV;
+        }
+        else if(rank[parU]>rank[parV]){
+            parent[parV]=parU;
+        }
+        else{
+            parent[parU]=parV;
         }
     }
+};
+class Solution {
+public:
     int makeConnected(int n, vector<vector<int>>& connections) {
-        if(connections.size()<n-1) return -1;
-        vector<vector<int>> adj(n);
-        for(auto links:connections){
-            adj[links[0]].push_back(links[1]);
-            adj[links[1]].push_back(links[0]);
-        }
-        vector<bool> vis(n,0);
-        int miniOps=0;
-        for(int i=0;i<n;i++){
-            if(!vis[i]){
-                dfs(i,vis,adj);
-                miniOps++;
+        int edges = connections.size();
+        if(edges<n-1) return -1;
+        //Use union find to count number of connected components
+        //No. of operations needed = TotalConnectedComp - 1.
+        int minOps=n;
+        DSU* dsu = new DSU(n);
+        for(auto &e:connections){
+            int u = e[0];
+            int v = e[1];
+            
+            int parU = dsu->findParent(u);
+            int parV = dsu->findParent(v);
+            
+            if(parU!=parV){
+                dsu->Union(u,v);
+                minOps-=1;
             }
         }
-        return miniOps-1;
+        return minOps-1;
     }
 };
