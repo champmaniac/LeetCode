@@ -27,6 +27,7 @@ public:
                     vis[vertex]=true;
                 }
             }
+            if(vis[destination]) return true;
         }
         return vis[destination];
     }
