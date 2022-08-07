@@ -1,34 +1,34 @@
 class Solution {
 public:
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> st;
-        bool isPresent = false;
-        for(auto word:wordList){
-            if(endWord.compare(word)==0)
-                isPresent = true;
-            st.insert(word);
+    int ladderLength(string start, string end, vector<string>& wordList) {
+        queue<string>q;
+        q.push(start);
+        int wordSize = start.size();
+        
+        unordered_set<string> word;
+        for(int i=0;i<wordList.size();i++){
+            word.insert(wordList[i]);
         }
-        if(isPresent==false) return 0;
-        queue<string> q;
-        q.push(beginWord);
-        int level = 0;
+        if(word.find(end)==word.end()) return 0;
+        int len=0;
         while(!q.empty()){
-            level+=1;
-            int sz = q.size();
-            while(sz--){
-                string top = q.front();
+            len++;
+            int qLen = q.size();
+            for(int i=0;i<qLen;i++){
+                string s= q.front();
                 q.pop();
-                for(int i=0;i<top.size();i++){
-                    string temp = top;
-                    for(char c='a';c<='z';c++){
-                        temp[i]=c;
-                        if(top.compare(temp)==0) continue;
-                        if(temp.compare(endWord)==0) return level+1;
-                        if(st.find(temp)!=st.end()){
-                            q.push(temp);
-                            st.erase(temp);
-                        }
+                
+                for(int j=0;j<wordSize;j++){
+                    char org=s[j];
+                    for(char ch='a';ch<='z';ch++){
+                        s[j]=ch;
+                        if(s==end) return len+1;
+                        if(word.find(s)==word.end()) continue;
+                        
+                        word.erase(s);
+                        q.push(s);
                     }
+                    s[j]=org;
                 }
             }
         }
