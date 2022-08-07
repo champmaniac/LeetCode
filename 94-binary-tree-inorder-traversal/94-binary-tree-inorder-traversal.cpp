@@ -12,33 +12,30 @@
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> inorder;
+        vector<int> inOrder;
+        if(!root) return inOrder;
         TreeNode* cur = root;
         while(cur!=NULL){
-// First Case
-// If Left doesn't exists it clearly means just push the current node and move right
             if(cur->left==NULL){
-                inorder.push_back(cur->val);
+                inOrder.push_back(cur->val);
                 cur=cur->right;
             }
-// Second Case
-// Go to the left and from there go to the rightmost guy and it should not point to cur
             else{
                 TreeNode* prev = cur->left;
-                while(prev->right && prev->right!=cur){
-                    prev = prev->right;
+                while(prev->right!=NULL && prev->right!=cur){
+                    prev=prev->right;
                 }
                 if(prev->right==NULL){
-                    prev->right = cur;
-                    cur = cur->left;
+                    prev->right=cur;
+                    cur=cur->left;
                 }
                 else if(prev->right==cur){
-                    prev->right = NULL;
-                    inorder.push_back(cur->val);
-                    cur = cur->right;
+                    prev->right=NULL;
+                    inOrder.push_back(cur->val);
+                    cur=cur->right;
                 }
             }
         }
-        return inorder;
+        return inOrder;
     }
 };
