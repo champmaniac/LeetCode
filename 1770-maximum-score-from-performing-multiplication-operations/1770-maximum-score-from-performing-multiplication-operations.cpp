@@ -1,23 +1,17 @@
 class Solution {
 public:
-    vector<vector<int>> dp;
-    int solve(int i, int n, int j, vector<int> &nums, vector<int> &M){
+    int maximumScore(vector<int>& nums, vector<int>& multi) {
+        int m=multi.size(), n=nums.size();
         
-        if (j == M.size()) return 0;
-        if (dp[i][j] != INT_MIN) return dp[i][j];
+        vector <vector<int>> dp (m+1, vector<int> (m+1));   //dp 2D array
         
-        // Left Side
-        int left = solve(i + 1, n, j + 1, nums, M) + (nums[i] * M[j]);
+        for(int i=m-1; i>=0; i--){                          //for the state variable m
+            for(int left=i; left>=0; left--){               //for the state variable left
+                int mult = multi[i], right = n-1-(i-left);  //state variable right is calculated within loop
+                dp[i][left] = max(mult*nums[left]+dp[i+1][left+1], mult*nums[right]+dp[i+1][left]); //recurrence relation
+            }
+        }
         
-        // Right Side
-        int right = solve(i, n, j + 1, nums, M) + (nums[(n - 1) - (j - i)] * M[j]);
-        
-        return dp[i][j] = max(left, right);
-    }
-    
-    int maximumScore(vector<int>& nums, vector<int>& M) {   
-        int n = nums.size(), m = M.size();
-        dp.resize(m + 1, vector<int>(m + 1, INT_MIN));
-        return solve(0, n, 0, nums, M);
+        return dp[0][0];        //retyrning our result
     }
 };
