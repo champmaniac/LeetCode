@@ -1,31 +1,46 @@
-// { Driver Code Starts
+//{ Driver Code Starts
 //Initial template for C++
 
 #include<bits/stdc++.h>
 using namespace std;
 
- // } Driver Code Ends
+// } Driver Code Ends
 //User function template for C++
 
 class Solution {
   public:
-	void shortest_distance(vector<vector<int>>&mat){
+	void shortest_distance(vector<vector<int>>&matrix){
 	    // Code here
-	    int n = mat.size();
-	    int i,j,k;
-	    for(k=0;k<n;k++){
-	        for(i=0;i<n;i++){
-	            for(j=0;j<n;j++){
-	                if(i==k || j==k || mat[i][k]==-1 || mat[k][j]==-1) continue;
-	                else if(mat[i][j]==-1) mat[i][j]=INT_MAX;
-	                mat[i][j]=min(mat[i][j],mat[i][k]+mat[k][j]);
+	    int n = matrix.size();
+	    for(int i=0;i<n;i++){
+	        for(int j=0;j<n;j++){
+	            if(matrix[i][j]==-1){
+	                matrix[i][j]=1e9;
+	            }
+	            if(i==j) matrix[i][j]=0;
+	        }
+	    }
+	    
+	    for(int k=0;k<n;k++){
+	        for(int i=0;i<n;i++){
+	            for(int j=0;j<n;j++){
+	                matrix[i][j] = min(matrix[i][j],
+	                matrix[i][k]+matrix[k][j]);
+	            }
+	        }
+	    }
+	    
+	    for(int i=0;i<n;i++){
+	        for(int j=0;j<n;j++){
+	            if(matrix[i][j]==1e9){
+	                matrix[i][j]=-1;
 	            }
 	        }
 	    }
 	}
 };
 
-// { Driver Code Starts.
+//{ Driver Code Starts.
 int main(){
 	int tc;
 	cin >> tc;
@@ -48,4 +63,5 @@ int main(){
 		}
 	}
 	return 0;
-}  // } Driver Code Ends
+}
+// } Driver Code Ends
