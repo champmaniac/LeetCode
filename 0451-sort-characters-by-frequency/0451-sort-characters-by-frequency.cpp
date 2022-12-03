@@ -1,12 +1,13 @@
 class Solution {
 public:
     string frequencySort(string s) {
-        unordered_map<char,int>mp;
+        string ans;
+        int n = s.size();
+        map<char,int>mp;
         for(auto it:s){
             mp[it]++;
         }
         priority_queue<pair<int,char>> pq;
-        string ans="";
         for(auto it:mp){
             pq.push({it.second,it.first});
         }
