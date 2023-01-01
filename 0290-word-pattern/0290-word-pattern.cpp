@@ -1,16 +1,31 @@
 class Solution {
 public:
     bool wordPattern(string pattern, string s) {
-        map<char,int> p2i;
-        map<string,int> w2i;
-        int i=0,n=pattern.size();
-        istringstream in(s);
-        for(string word;in>>word;i++){
-            if(i==n || p2i[pattern[i]]!=w2i[word]){
+        stringstream ss(s);
+        vector<string> words;
+        string word;
+        while (ss >> word) {
+            words.push_back(word);
+        }
+
+        // check if s follows the pattern
+        if (pattern.size() != words.size()) {
+            return false;
+        }
+        unordered_map<char, string> char_to_word;
+        unordered_map<string, char> word_to_char;
+        for (int i = 0; i < pattern.size(); i++) {
+            char c = pattern[i];
+            string w = words[i];
+            if (char_to_word.count(c) && char_to_word[c] != w) {
                 return false;
             }
-            p2i[pattern[i]]=w2i[word]=i+1;
+            if (word_to_char.count(w) && word_to_char[w] != c) {
+                return false;
+            }
+            char_to_word[c] = w;
+            word_to_char[w] = c;
         }
-        return i==n;
+        return true;
     }
 };
